@@ -4,139 +4,167 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>NFL Predictor Pro</title>
+    <title>NFL Predictor Analyst</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background-color: #020617; color: white; -webkit-tap-highlight-color: transparent; }
         .nfl-card { background: linear-gradient(145deg, #1e293b, #0f172a); border: 1px solid #334155; }
-        select { appearance: none; -webkit-appearance: none; }
+        .tab-active { border-bottom: 3px solid #3b82f6; color: #3b82f6; }
+        .stat-bar { height: 6px; border-radius: 3px; transition: width 0.8s ease-out; }
+        .joke-box { background: rgba(59, 130, 246, 0.1); border-left: 4px solid #3b82f6; }
     </style>
 </head>
-<body class="font-sans antialiased pb-10">
+<body class="font-sans antialiased pb-24">
 
     <div class="max-w-md mx-auto p-4">
-        <header class="flex justify-between items-center py-6">
-            <h1 class="text-3xl font-black italic tracking-tighter text-blue-500">NFL<span class="text-white">PREDICT</span></h1>
-            <button onclick="window.location.reload()" class="text-[10px] font-bold text-gray-500 border border-gray-800 px-3 py-1 rounded-full uppercase">Update Stats</button>
-        </header>
+        <div id="joke-box" class="joke-box p-3 rounded-r-xl mb-4">
+            <p id="joke-text" class="text-[11px] italic text-gray-300">"Loading fresh American humor..."</p>
+        </div>
 
-        <section class="mb-8">
-            <div class="nfl-card p-6 rounded-[2.5rem] shadow-2xl">
-                <div class="flex items-center justify-between mb-8 gap-4">
-                    <div class="flex flex-col items-center w-1/2">
-                        <img id="logoA" src="https://a.espncdn.com/i/teamlogos/nfl/500/kc.png" class="w-20 h-20 mb-3 drop-shadow-lg">
-                        <select id="teamA" onchange="updateUI('A')" class="bg-slate-800 text-white rounded-xl p-3 text-xs w-full text-center border-none font-bold">
-                            </select>
+        <nav class="flex justify-around border-b border-slate-800 mb-6 sticky top-0 bg-[#020617] z-20 pt-2">
+            <button onclick="showTab('predict')" id="tab-predict" class="pb-3 text-[10px] font-black tab-active uppercase tracking-widest text-blue-500">Predict</button>
+            <button onclick="showTab('bets')" id="tab-bets" class="pb-3 text-[10px] font-black text-gray-500 uppercase tracking-widest">Paris</button>
+            <button onclick="showTab('schedule')" id="tab-schedule" class="pb-3 text-[10px] font-black text-gray-500 uppercase tracking-widest">Infos</button>
+        </nav>
+
+        <div id="section-predict">
+            <div class="nfl-card p-6 rounded-[2.5rem] shadow-2xl mb-6">
+                <div class="flex items-center justify-between mb-8 gap-2">
+                    <div class="w-5/12 text-center">
+                        <img id="logoA" src="https://a.espncdn.com/i/teamlogos/nfl/500/ne.png" class="w-16 h-16 mx-auto mb-3 drop-shadow-lg">
+                        <select id="teamA" onchange="updateUI()" class="bg-slate-800 text-white rounded-xl p-2 text-[10px] w-full text-center border-none font-bold uppercase"></select>
                     </div>
-
-                    <div class="text-2xl font-black text-red-600 italic mt-4">VS</div>
-
-                    <div class="flex flex-col items-center w-1/2">
-                        <img id="logoB" src="https://a.espncdn.com/i/teamlogos/nfl/500/sf.png" class="w-20 h-20 mb-3 drop-shadow-lg">
-                        <select id="teamB" onchange="updateUI('B')" class="bg-slate-800 text-white rounded-xl p-3 text-xs w-full text-center border-none font-bold">
-                            </select>
+                    <div class="text-xl font-black text-red-600 italic">VS</div>
+                    <div class="w-5/12 text-center">
+                        <img id="logoB" src="https://a.espncdn.com/i/teamlogos/nfl/500/sea.png" class="w-16 h-16 mx-auto mb-3 drop-shadow-lg">
+                        <select id="teamB" onchange="updateUI()" class="bg-slate-800 text-white rounded-xl p-2 text-[10px] w-full text-center border-none font-bold uppercase"></select>
                     </div>
                 </div>
 
-                <button onclick="calculatePrediction()" class="w-full bg-blue-600 hover:bg-blue-500 py-5 rounded-2xl font-black tracking-[0.2em] transition-all active:scale-95 shadow-xl shadow-blue-900/40 text-sm">PRÉDIRE LE SCORE</button>
-            </div>
-        </section>
+                <div class="space-y-4 mb-8 bg-black/30 p-4 rounded-2xl">
+                    <div>
+                        <div class="flex justify-between text-[9px] font-bold uppercase mb-1">
+                            <span id="nameStatA1">Team A</span> <span>OFFENSE</span> <span id="nameStatB1">Team B</span>
+                        </div>
+                        <div class="flex w-full gap-1">
+                            <div class="flex-1 bg-gray-800 rounded-full overflow-hidden flex justify-end">
+                                <div id="barOffA" class="stat-bar bg-blue-500" style="width: 50%"></div>
+                            </div>
+                            <div class="flex-1 bg-gray-800 rounded-full overflow-hidden">
+                                <div id="barOffB" class="stat-bar bg-red-500" style="width: 50%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-[9px] font-bold uppercase mb-1">
+                            <span id="nameStatA2">Team A</span> <span>DEFENSE</span> <span id="nameStatB2">Team B</span>
+                        </div>
+                        <div class="flex w-full gap-1">
+                            <div class="flex-1 bg-gray-800 rounded-full overflow-hidden flex justify-end">
+                                <div id="barDefA" class="stat-bar bg-blue-400" style="width: 50%"></div>
+                            </div>
+                            <div class="flex-1 bg-gray-800 rounded-full overflow-hidden">
+                                <div id="barDefB" class="stat-bar bg-red-400" style="width: 50%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-        <div id="prediction-result" class="hidden mb-10 scale-in-center">
-            <div class="bg-white text-black p-8 rounded-[3rem] text-center shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative overflow-hidden">
-                <div class="absolute top-0 left-0 w-full h-1 bg-blue-600"></div>
-                <p class="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-4 italic underline">Résultat Analytique</p>
-                <div class="flex justify-around items-center mb-4">
+                <button onclick="calculatePrediction()" class="w-full bg-blue-600 py-4 rounded-2xl font-black tracking-widest active:scale-95 transition-all shadow-xl text-xs">ANALYSER LE MATCH</button>
+            </div>
+
+            <div id="prediction-result" class="hidden text-center bg-white text-black p-6 rounded-[2.5rem] shadow-2xl mb-4">
+                <div class="flex justify-around items-center mb-2">
                     <div class="text-6xl font-black tracking-tighter" id="resA">0</div>
-                    <div class="text-2xl font-light text-gray-300">/</div>
+                    <div class="text-xl text-gray-200 italic">Score</div>
                     <div class="text-6xl font-black tracking-tighter" id="resB">0</div>
                 </div>
-                <div id="winner-tag" class="text-[11px] font-bold py-2 px-6 bg-blue-100 text-blue-700 rounded-full inline-block uppercase tracking-tighter">Probabilité de victoire : 0%</div>
-            </div>
-        </section>
-
-        <section class="mt-4">
-            <h3 class="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em] ml-2 mb-4">Focus Statistiques 2025</h3>
-            <div id="stats-container" class="space-y-2">
+                <div id="winner-tag" class="text-[10px] font-black py-2 px-6 bg-blue-600 text-white rounded-full inline-block uppercase italic mb-4"></div>
+                <div class="flex gap-2">
+                    <button onclick="saveBet()" class="flex-1 bg-amber-500 text-white py-3 rounded-xl font-bold text-[10px] uppercase">Enregistrer</button>
+                    <button onclick="shareResult()" class="flex-1 bg-emerald-600 text-white py-3 rounded-xl font-bold text-[10px] uppercase">Partager</button>
                 </div>
-        </section>
+            </div>
+        </div>
+
+        <div id="section-bets" class="hidden space-y-2" id="bets-list"></div>
+        <div id="section-schedule" class="hidden space-y-4">
+            <div class="nfl-card p-5 rounded-3xl border-l-4 border-blue-500">
+                <h4 class="text-sm font-black uppercase mb-2">Super Bowl LX</h4>
+                <p class="text-[11px] text-gray-400">📍 Levi's Stadium, CA</p>
+                <p class="text-[11px] text-blue-400 font-bold">📅 8 Fév 2026 - 00:30 Heure FR</p>
+            </div>
+        </div>
     </div>
 
     <script>
-        const teams = [
-            { id: "ari", name: "AZ Cardinals", off: 21, def: 25, logo: "ari" },
-            { id: "atl", name: "ATL Falcons", off: 23, def: 18, logo: "atl" },
-            { id: "bal", name: "BAL Ravens", off: 29, def: 30, logo: "bal" },
-            { id: "buf", name: "BUF Bills", off: 28, def: 24, logo: "buf" },
-            { id: "car", name: "CAR Panthers", off: 14, def: 20, logo: "car" },
-            { id: "chi", name: "CHI Bears", off: 20, def: 22, logo: "chi" },
-            { id: "cin", name: "CIN Bengals", off: 26, def: 19, logo: "cin" },
-            { id: "cle", name: "CLE Browns", off: 19, def: 29, logo: "cle" },
-            { id: "dal", name: "DAL Cowboys", off: 28, def: 23, logo: "dal" },
-            { id: "den", name: "DEN Broncos", off: 20, def: 17, logo: "den" },
-            { id: "det", name: "DET Lions", off: 30, def: 21, logo: "det" },
-            { id: "gb",  name: "GB Packers", off: 25, def: 20, logo: "gb" },
-            { id: "hou", name: "HOU Texans", off: 24, def: 21, logo: "hou" },
-            { id: "ind", name: "IND Colts", off: 22, def: 18, logo: "ind" },
-            { id: "jax", name: "JAX Jaguars", off: 21, def: 19, logo: "jax" },
-            { id: "kc",  name: "KC Chiefs", off: 31, def: 28, logo: "kc" },
-            { id: "lv",  name: "LV Raiders", off: 18, def: 24, logo: "lv" },
-            { id: "lac", name: "LA Chargers", off: 23, def: 20, logo: "lac" },
-            { id: "lar", name: "LA Rams", off: 24, def: 19, logo: "lar" },
-            { id: "mia", name: "MIA Dolphins", off: 31, def: 18, logo: "mia" },
-            { id: "min", name: "MIN Vikings", off: 22, def: 20, logo: "min" },
-            { id: "ne",  name: "NE Patriots", off: 13, def: 25, logo: "ne" },
-            { id: "no",  name: "NO Saints", off: 21, def: 22, logo: "no" },
-            { id: "nyg", name: "NY Giants", off: 15, def: 20, logo: "nyg" },
-            { id: "nyj", name: "NY Jets", off: 18, def: 30, logo: "nyj" },
-            { id: "phi", name: "PHI Eagles", off: 27, def: 20, logo: "phi" },
-            { id: "pit", name: "PIT Steelers", off: 18, def: 26, logo: "pit" },
-            { id: "sf",  name: "SF 49ers", off: 31, def: 29, logo: "sf" },
-            { id: "sea", name: "SEA Seahawks", off: 23, def: 18, logo: "sea" },
-            { id: "tb",  name: "TB Buccaneers", off: 22, def: 21, logo: "tb" },
-            { id: "ten", name: "TEN Titans", off: 17, def: 19, logo: "ten" },
-            { id: "was", name: "WAS Commanders", off: 19, def: 14, logo: "was" }
+        const jokes = [
+            "Why did the football coach go to the bank? To get his quarter back!",
+            "Why was the stadium so cool? It was full of fans!",
+            "Why did the football team go to the bakery? They needed a good roll!",
+            "Which football player wears the biggest helmet? The one with the biggest head!"
         ];
 
-        // Charger les menus déroulants
-        const selectA = document.getElementById('teamA');
-        const selectB = document.getElementById('teamB');
+        const teams = [
+            { id: "ne", name: "Patriots", off: 22, def: 24, record: "8-9" },
+            { id: "sea", name: "Seahawks", off: 23, def: 19, record: "9-8" },
+            { id: "kc", name: "Chiefs", off: 31, def: 28, record: "14-3" },
+            { id: "sf", name: "49ers", off: 31, def: 29, record: "12-5" },
+            { id: "bal", name: "Ravens", off: 29, def: 30, record: "13-4" },
+            { id: "phi", name: "Eagles", off: 27, def: 21, record: "11-6" }
+            // ... (Ajouter les autres ici)
+        ];
 
-        teams.forEach(team => {
-            const opt = `<option value="${team.id}">${team.name}</option>`;
-            selectA.innerHTML += opt;
-            selectB.innerHTML += opt;
-        });
+        function init() {
+            document.getElementById('joke-text').innerText = jokes[Math.floor(Math.random() * jokes.length)];
+            const selectA = document.getElementById('teamA');
+            const selectB = document.getElementById('teamB');
+            teams.forEach(t => {
+                const opt = `<option value="${t.id}">${t.name}</option>`;
+                selectA.innerHTML += opt; selectB.innerHTML += opt;
+            });
+            selectA.value = "ne"; selectB.value = "sea";
+            updateUI();
+        }
 
-        // Par défaut
-        selectA.value = "kc";
-        selectB.value = "sf";
-
-        function updateUI(side) {
-            const teamId = document.getElementById('team' + side).value;
-            document.getElementById('logo' + side).src = `https://a.espncdn.com/i/teamlogos/nfl/500/${teamId}.png`;
+        function updateUI() {
+            const tA = teams.find(t => t.id === document.getElementById('teamA').value);
+            const tB = teams.find(t => t.id === document.getElementById('teamB').value);
+            
+            document.getElementById('logoA').src = `https://a.espncdn.com/i/teamlogos/nfl/500/${tA.id}.png`;
+            document.getElementById('logoB').src = `https://a.espncdn.com/i/teamlogos/nfl/500/${tB.id}.png`;
+            
+            // Mise à jour des barres (max stat est 32)
+            document.getElementById('barOffA').style.width = (tA.off / 32 * 100) + "%";
+            document.getElementById('barOffB').style.width = (tB.off / 32 * 100) + "%";
+            document.getElementById('barDefA').style.width = (tA.def / 32 * 100) + "%";
+            document.getElementById('barDefB').style.width = (tB.def / 32 * 100) + "%";
+            
+            document.getElementById('nameStatA1').innerText = tA.name;
+            document.getElementById('nameStatB1').innerText = tB.name;
+            document.getElementById('nameStatA2').innerText = tA.name;
+            document.getElementById('nameStatB2').innerText = tB.name;
         }
 
         function calculatePrediction() {
-            const tA = teams.find(t => t.id === selectA.value);
-            const tB = teams.find(t => t.id === selectB.value);
-
-            // Algorithme : (Attaque A - Défense B) + Aléatoire de match
-            let scoreA = Math.round((tA.off * 0.8) + (32 - tB.def) * 0.2 + (Math.random() * 14));
-            let scoreB = Math.round((tB.off * 0.8) + (32 - tA.def) * 0.2 + (Math.random() * 14));
-
-            // Sécurité scores réalistes NFL
-            if(scoreA < 0) scoreA = 0; if(scoreB < 0) scoreB = 0;
-
-            document.getElementById('resA').innerText = scoreA;
-            document.getElementById('resB').innerText = scoreB;
-            
-            const prob = 50 + Math.round((tA.off + tA.def - (tB.off + tB.def)) / 2) + Math.round(Math.random() * 5);
-            document.getElementById('winner-tag').innerText = `Confiance Analyse : ${Math.min(99, Math.max(1, prob))}%`;
-            
+            const tA = teams.find(t => t.id === document.getElementById('teamA').value);
+            const tB = teams.find(t => t.id === document.getElementById('teamB').value);
+            let sA = Math.round((tA.off * 0.7) + (32 - tB.def) * 0.3 + (Math.random() * 10));
+            let sB = Math.round((tB.off * 0.7) + (32 - tA.def) * 0.3 + (Math.random() * 10));
+            document.getElementById('resA').innerText = sA;
+            document.getElementById('resB').innerText = sB;
+            document.getElementById('winner-tag').innerText = sA > sB ? `Favori : ${tA.name}` : `Favori : ${tB.name}`;
             document.getElementById('prediction-result').classList.remove('hidden');
-            if(navigator.vibrate) navigator.vibrate(100);
         }
+
+        function showTab(tab) {
+            ['predict', 'bets', 'schedule'].forEach(t => {
+                document.getElementById('section-' + t).classList.toggle('hidden', t !== tab);
+                document.getElementById('tab-' + t).classList.toggle('tab-active', t === tab);
+            });
+        }
+
+        init();
     </script>
 </body>
 </html>
