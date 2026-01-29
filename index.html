@@ -18,7 +18,7 @@
 
     <div class="max-w-md mx-auto p-4">
         <div class="joke-box p-3 rounded-r-xl mb-4">
-            <p id="joke-text" class="text-[11px] italic text-gray-300">"Why did the football coach go to the bank? To get his quarter back!"</p>
+            <p id="joke-text" class="text-[11px] italic text-gray-300">"Loading..."</p>
         </div>
 
         <nav class="flex justify-around border-b border-slate-800 mb-6 sticky top-0 bg-[#020617] z-20 pt-2">
@@ -29,13 +29,13 @@
 
         <div id="section-predict">
             <div class="nfl-card p-6 rounded-[2.5rem] shadow-2xl mb-6">
-                <div class="flex items-center justify-between mb-8 gap-2">
-                    <div class="w-5/12 text-center">
+                <div class="flex items-center justify-between mb-8 gap-2 text-center">
+                    <div class="w-5/12">
                         <img id="logoA" src="" class="w-16 h-16 mx-auto mb-3 drop-shadow-lg">
                         <select id="teamA" onchange="updateUI()" class="bg-slate-800 text-white rounded-xl p-2 text-[10px] w-full text-center border-none font-bold uppercase"></select>
                     </div>
                     <div class="text-xl font-black text-red-600 italic">VS</div>
-                    <div class="w-5/12 text-center">
+                    <div class="w-5/12">
                         <img id="logoB" src="" class="w-16 h-16 mx-auto mb-3 drop-shadow-lg">
                         <select id="teamB" onchange="updateUI()" class="bg-slate-800 text-white rounded-xl p-2 text-[10px] w-full text-center border-none font-bold uppercase"></select>
                     </div>
@@ -44,42 +44,32 @@
                 <div class="space-y-4 mb-8 bg-black/30 p-4 rounded-2xl">
                     <div>
                         <div class="flex justify-between text-[8px] font-bold uppercase mb-1">
-                            <span id="nameStatA1">Team A</span> <span class="text-gray-500 tracking-widest">OFFENSE</span> <span id="nameStatB1">Team B</span>
+                            <span id="nameStatA1"></span> <span class="text-gray-500">OFFENSE</span> <span id="nameStatB1"></span>
                         </div>
                         <div class="flex w-full gap-1">
-                            <div class="flex-1 bg-gray-800 rounded-full overflow-hidden flex justify-end">
-                                <div id="barOffA" class="stat-bar bg-blue-500"></div>
-                            </div>
-                            <div class="flex-1 bg-gray-800 rounded-full overflow-hidden">
-                                <div id="barOffB" class="stat-bar bg-red-500"></div>
-                            </div>
+                            <div class="flex-1 bg-gray-800 rounded-full overflow-hidden flex justify-end"><div id="barOffA" class="stat-bar bg-blue-500"></div></div>
+                            <div class="flex-1 bg-gray-800 rounded-full overflow-hidden"><div id="barOffB" class="stat-bar bg-red-500"></div></div>
                         </div>
                     </div>
                     <div>
                         <div class="flex justify-between text-[8px] font-bold uppercase mb-1">
-                            <span id="nameStatA2">Team A</span> <span class="text-gray-500 tracking-widest">DEFENSE</span> <span id="nameStatB2">Team B</span>
+                            <span id="nameStatA2"></span> <span class="text-gray-500">DEFENSE</span> <span id="nameStatB2"></span>
                         </div>
                         <div class="flex w-full gap-1">
-                            <div class="flex-1 bg-gray-800 rounded-full overflow-hidden flex justify-end">
-                                <div id="barDefA" class="stat-bar bg-blue-400"></div>
-                            </div>
-                            <div class="flex-1 bg-gray-800 rounded-full overflow-hidden">
-                                <div id="barDefB" class="stat-bar bg-red-400"></div>
-                            </div>
+                            <div class="flex-1 bg-gray-800 rounded-full overflow-hidden flex justify-end"><div id="barDefA" class="stat-bar bg-blue-400"></div></div>
+                            <div class="flex-1 bg-gray-800 rounded-full overflow-hidden"><div id="barDefB" class="stat-bar bg-red-400"></div></div>
                         </div>
                     </div>
                 </div>
 
-                <button onclick="calculatePrediction()" class="w-full bg-blue-600 py-4 rounded-2xl font-black tracking-widest active:scale-95 transition-all shadow-xl text-xs uppercase italic">Analyser Match</button>
+                <button onclick="calculatePrediction()" class="w-full bg-blue-600 py-4 rounded-2xl font-black tracking-widest active:scale-95 transition-all text-xs uppercase">Analyser Match</button>
             </div>
 
-            <div id="prediction-result" class="hidden text-center bg-white text-black p-6 rounded-[2.5rem] shadow-2xl mb-4 scale-in-center">
+            <div id="prediction-result" class="hidden text-center bg-white text-black p-6 rounded-[2.5rem] shadow-2xl mb-4">
                 <div class="flex justify-around items-center mb-2 text-6xl font-black tracking-tighter">
-                    <span id="resA">0</span>
-                    <span class="text-gray-200 italic text-xl">Score</span>
-                    <span id="resB">0</span>
+                    <span id="resA">0</span><span class="text-gray-200 italic text-xl">Score</span><span id="resB">0</span>
                 </div>
-                <div id="winner-tag" class="text-[10px] font-black py-2 px-6 bg-blue-600 text-white rounded-full inline-block uppercase italic mb-4 tracking-tighter"></div>
+                <div id="winner-tag" class="text-[10px] font-black py-2 px-6 bg-blue-600 text-white rounded-full inline-block uppercase mb-4"></div>
                 <div class="flex gap-2">
                     <button onclick="saveBet()" class="flex-1 bg-amber-500 text-white py-3 rounded-xl font-bold text-[10px] uppercase">Sauvegarder</button>
                     <button onclick="shareResult()" class="flex-1 bg-emerald-600 text-white py-3 rounded-xl font-bold text-[10px] uppercase">Partager</button>
@@ -87,19 +77,22 @@
             </div>
         </div>
 
-        <div id="section-bets" class="hidden space-y-2" id="bets-list-container">
-            <h3 class="text-blue-400 text-[10px] font-black uppercase mb-4 tracking-widest">Tes Pronos Enregistrés</h3>
-            <div id="bets-list" class="space-y-2"></div>
+        <div id="section-bets" class="hidden space-y-4">
+            <div class="flex justify-between items-center">
+                <h3 class="text-blue-400 text-[10px] font-black uppercase tracking-widest">Tes Pronos Enregistrés</h3>
+                <button onclick="clearAllBets()" class="text-[9px] text-red-500 uppercase font-bold underline">Effacer tout</button>
+            </div>
+            <div id="bets-list" class="space-y-2">
+                </div>
         </div>
 
-        <div id="section-schedule" class="hidden space-y-4">
+        <div id="section-schedule" class="hidden">
             <div class="nfl-card p-6 rounded-3xl border-l-4 border-amber-500">
                 <h4 class="text-sm font-black uppercase mb-1">🏆 Super Bowl LX</h4>
-                <p class="text-[10px] text-gray-400 mb-3 italic">"Where legends are made"</p>
-                <div class="space-y-1 text-[11px] font-bold">
+                <div class="space-y-1 text-[11px] font-bold text-gray-300">
                     <p>🏟️ Levi's Stadium, CA</p>
-                    <p class="text-blue-400">📅 8 Février 2026</p>
-                    <p class="text-red-500">⏰ 00:30 (Heure de Paris)</p>
+                    <p>📅 8 Février 2026</p>
+                    <p class="text-red-500">⏰ 00:30 (Heure FR)</p>
                 </div>
             </div>
         </div>
@@ -142,83 +135,65 @@
         ];
 
         function init() {
-            const selectA = document.getElementById('teamA');
-            const selectB = document.getElementById('teamB');
-            
-            teams.sort((a,b) => a.name.localeCompare(b.name)).forEach(t => {
-                const trophy = t.sb ? " 🏆" : "";
-                const opt = `<option value="${t.id}">${t.name}${trophy}</option>`;
-                selectA.innerHTML += opt; selectB.innerHTML += opt;
+            const jokes = ["Why was the stadium so cool? It was full of fans!", "Why did the coach go to the bank? To get his quarter back!", "What do football players use for hair? Helmet-spray!"];
+            document.getElementById('joke-text').innerText = jokes[Math.floor(Math.random()*jokes.length)];
+            const sA = document.getElementById('teamA'); const sB = document.getElementById('teamB');
+            teams.sort((a,b)=>a.name.localeCompare(b.name)).forEach(t => {
+                const opt = `<option value="${t.id}">${t.name}${t.sb?' 🏆':''}</option>`;
+                sA.innerHTML += opt; sB.innerHTML += opt;
             });
-            
-            selectA.value = "ne"; selectB.value = "sea";
+            sA.value = "ne"; sB.value = "sea";
             updateUI();
-            loadBets();
         }
 
         function updateUI() {
             const tA = teams.find(t => t.id === document.getElementById('teamA').value);
             const tB = teams.find(t => t.id === document.getElementById('teamB').value);
-            
             document.getElementById('logoA').src = `https://a.espncdn.com/i/teamlogos/nfl/500/${tA.id}.png`;
             document.getElementById('logoB').src = `https://a.espncdn.com/i/teamlogos/nfl/500/${tB.id}.png`;
-            
-            document.getElementById('barOffA').style.width = (tA.off / 32 * 100) + "%";
-            document.getElementById('barOffB').style.width = (tB.off / 32 * 100) + "%";
-            document.getElementById('barDefA').style.width = (tA.def / 32 * 100) + "%";
-            document.getElementById('barDefB').style.width = (tB.def / 32 * 100) + "%";
-            
-            document.getElementById('nameStatA1').innerText = tA.name;
-            document.getElementById('nameStatB1').innerText = tB.name;
-            document.getElementById('nameStatA2').innerText = tA.name;
-            document.getElementById('nameStatB2').innerText = tB.name;
+            document.getElementById('barOffA').style.width = (tA.off/32*100)+"%";
+            document.getElementById('barOffB').style.width = (tB.off/32*100)+"%";
+            document.getElementById('barDefA').style.width = (tA.def/32*100)+"%";
+            document.getElementById('barDefB').style.width = (tB.def/32*100)+"%";
+            document.getElementById('nameStatA1').innerText = document.getElementById('nameStatA2').innerText = tA.name;
+            document.getElementById('nameStatB1').innerText = document.getElementById('nameStatB2').innerText = tB.name;
         }
 
         function calculatePrediction() {
             const tA = teams.find(t => t.id === document.getElementById('teamA').value);
             const tB = teams.find(t => t.id === document.getElementById('teamB').value);
-            
-            // Bonus Champion SB
-            const bonusA = tA.sb ? 2 : 0;
-            const bonusB = tB.sb ? 2 : 0;
-
-            let sA = Math.round((tA.off * 0.7) + (32 - tB.def) * 0.3 + bonusA + (Math.random() * 8));
-            let sB = Math.round((tB.off * 0.7) + (32 - tA.def) * 0.3 + bonusB + (Math.random() * 8));
-
-            document.getElementById('resA').innerText = sA;
-            document.getElementById('resB').innerText = sB;
-            document.getElementById('winner-tag').innerText = sA > sB ? `Victoire : ${tA.name}` : `Victoire : ${tB.name}`;
+            let sA = Math.round((tA.off*0.7) + (32-tB.def)*0.3 + (tA.sb?2:0) + (Math.random()*8));
+            let sB = Math.round((tB.off*0.7) + (32-tA.def)*0.3 + (tB.sb?2:0) + (Math.random()*8));
+            document.getElementById('resA').innerText = sA; document.getElementById('resB').innerText = sB;
+            document.getElementById('winner-tag').innerText = sA > sB ? `Favori : ${tA.name}` : `Favori : ${tB.name}`;
             document.getElementById('prediction-result').classList.remove('hidden');
         }
 
-        function showTab(tab) {
-            ['predict', 'bets', 'schedule'].forEach(t => {
-                document.getElementById('section-' + t).classList.toggle('hidden', t !== tab);
-                document.getElementById('tab-' + t).classList.toggle('text-blue-500', t === tab);
-                document.getElementById('tab-' + t).classList.toggle('tab-active', t === tab);
-            });
-        }
-
         function saveBet() {
-            const b = { 
-                m: document.getElementById('teamA').selectedOptions[0].text + " vs " + document.getElementById('teamB').selectedOptions[0].text,
-                s: document.getElementById('resA').innerText + " - " + document.getElementById('resB').innerText
-            };
+            const b = { m: document.getElementById('teamA').selectedOptions[0].text + " vs " + document.getElementById('teamB').selectedOptions[0].text, s: document.getElementById('resA').innerText + " - " + document.getElementById('resB').innerText };
             let bets = JSON.parse(localStorage.getItem('nfl_v9_bets') || '[]');
             bets.unshift(b);
             localStorage.setItem('nfl_v9_bets', JSON.stringify(bets));
-            loadBets();
+            alert("Pari enregistré !");
         }
 
         function loadBets() {
             const list = document.getElementById('bets-list');
             const bets = JSON.parse(localStorage.getItem('nfl_v9_bets') || '[]');
-            list.innerHTML = bets.map(b => `<div class="nfl-card p-4 rounded-2xl flex justify-between items-center mb-2 border-l-2 border-blue-500"><span class="text-[10px] font-bold uppercase">${b.m}</span><span class="text-blue-400 font-mono font-black">${b.s}</span></div>`).join('');
+            if(bets.length === 0) { list.innerHTML = "<p class='text-center text-gray-500 text-[10px] mt-10 uppercase'>Aucun pari enregistré</p>"; return; }
+            list.innerHTML = bets.map(b => `<div class="nfl-card p-4 rounded-2xl flex justify-between items-center border-l-2 border-blue-500"><span class="text-[10px] font-bold uppercase">${b.m}</span><span class="text-blue-400 font-mono font-black">${b.s}</span></div>`).join('');
         }
 
-        function shareResult() {
-            const text = `🏈 NFL PREDICT - Saison 2025/26\n${document.getElementById('teamA').selectedOptions[0].text} vs ${document.getElementById('teamB').selectedOptions[0].text}\nScore estimé : ${document.getElementById('resA').innerText}-${document.getElementById('resB').innerText}`;
-            if (navigator.share) navigator.share({ text: text }); else alert(text);
+        function clearAllBets() { if(confirm("Effacer l'historique ?")) { localStorage.removeItem('nfl_v9_bets'); loadBets(); } }
+
+        function showTab(tab) {
+            ['predict', 'bets', 'schedule'].forEach(t => {
+                document.getElementById('section-' + t).classList.toggle('hidden', t !== tab);
+                document.getElementById('tab-' + t).classList.toggle('tab-active', t === tab);
+                document.getElementById('tab-' + t).classList.toggle('text-blue-500', t === tab);
+                document.getElementById('tab-' + t).classList.toggle('text-gray-500', t !== tab);
+            });
+            if(tab === 'bets') loadBets(); // RECHARGER LES PARIS ICI
         }
 
         init();
