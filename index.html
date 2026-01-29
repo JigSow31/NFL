@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>NFL Predictor Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .nfl-card { background: linear-gradient(145deg, #1e293b, #0f172a); }
+        body { background-color: #020617; color: white; }
+    </style>
+</head>
+<body class="font-sans antialiased pb-20">
+
+    <div class="max-w-md mx-auto p-4">
+        <header class="flex justify-between items-center py-6">
+            <h1 class="text-3xl font-black italic tracking-tighter text-blue-500">NFL<span class="text-white underline decoration-red-600">PREDICT</span></h1>
+            <div class="bg-blue-900/30 px-3 py-1 rounded-full text-[10px] font-bold border border-blue-500 text-blue-400 uppercase">Saison 2026</div>
+        </header>
+
+        <section class="mb-8">
+            <h2 class="text-xs font-bold text-gray-500 uppercase mb-3 tracking-widest">Calculer une prédiction</h2>
+            <div class="nfl-card p-6 rounded-[2rem] border border-slate-800 shadow-2xl">
+                <div class="flex items-center justify-between mb-6">
+                    <select id="teamA" class="bg-slate-800 text-white rounded-lg p-2 text-sm w-5/12 border-none">
+                        <option value="31">Chiefs</option>
+                        <option value="28">Eagles</option>
+                        <option value="24">49ers</option>
+                    </select>
+                    <span class="font-black text-red-600 italic">VS</span>
+                    <select id="teamB" class="bg-slate-800 text-white rounded-lg p-2 text-sm w-5/12 border-none">
+                        <option value="24">Cowboys</option>
+                        <option value="20">Giants</option>
+                        <option value="27">Bills</option>
+                    </select>
+                </div>
+                <button onclick="calculatePrediction()" class="w-full bg-blue-600 hover:bg-blue-500 py-4 rounded-2xl font-black tracking-widest transition-transform active:scale-95 shadow-lg shadow-blue-900/40">ANALYSER LE MATCH</button>
+            </div>
+        </section>
+
+        <div id="prediction-result" class="hidden mb-8 animate-bounce-short">
+            <div class="bg-white text-black p-6 rounded-[2rem] text-center shadow-2xl overflow-hidden relative">
+                <div class="text-[10px] font-bold text-blue-600 uppercase mb-2">Score Prédit</div>
+                <div class="flex justify-around items-center">
+                    <div class="text-4xl font-black" id="resA">0</div>
+                    <div class="text-xl font-light text-gray-400">-</div>
+                    <div class="text-4xl font-black" id="resB">0</div>
+                </div>
+                <div id="winner-tag" class="mt-4 text-xs font-bold py-1 px-4 bg-green-100 text-green-700 rounded-full inline-block uppercase italic">Win probability: 68%</div>
+            </div>
+        </div>
+
+        <section>
+            <h2 class="text-xs font-bold text-gray-500 uppercase mb-3 tracking-widest">Power Rankings & Stats</h2>
+            <div class="space-y-3">
+                <div class="nfl-card p-4 rounded-2xl border border-slate-800 flex justify-between items-center">
+                    <div class="flex items-center">
+                        <span class="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center font-bold text-black text-xs mr-3">1</span>
+                        <div>
+                            <p class="font-bold text-sm">KC Chiefs</p>
+                            <p class="text-[10px] text-gray-400">Off: #1 | Def: #5</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="font-mono text-xs text-green-400">W-L: 14-3</p>
+                        <p class="text-[9px] text-gray-500">Streak: 4W</p>
+                    </div>
+                </div>
+                <div class="nfl-card p-4 rounded-2xl border border-slate-800 flex justify-between items-center opacity-70">
+                    <div class="flex items-center">
+                        <span class="w-8 h-8 bg-slate-700 rounded-full flex items-center justify-center font-bold text-white text-xs mr-3">2</span>
+                        <div>
+                            <p class="font-bold text-sm">SF 49ers</p>
+                            <p class="text-[10px] text-gray-400">Off: #3 | Def: #2</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="font-mono text-xs text-green-400">W-L: 13-4</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        function calculatePrediction() {
+            const teamA_Off = parseInt(document.getElementById('teamA').value);
+            const teamB_Off = parseInt(document.getElementById('teamB').value);
+            
+            // Simulation d'algo prédictif avec une part d'aléatoire (variance match)
+            const scoreA = Math.round(teamA_Off + (Math.random() * 7));
+            const scoreB = Math.round(teamB_Off + (Math.random() * 7));
+
+            document.getElementById('resA').innerText = scoreA;
+            document.getElementById('resB').innerText = scoreB;
+            
+            const resultDiv = document.getElementById('prediction-result');
+            resultDiv.classList.remove('hidden');
+            
+            const prob = 50 + Math.round(Math.random() * 40);
+            document.getElementById('winner-tag').innerText = `Confiance de l'IA: ${prob}%`;
+            
+            if(navigator.vibrate) navigator.vibrate(50);
+        }
+    </script>
+</body>
+</html>
